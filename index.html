@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="src/styles.css" />
+    <title>Weather App</title>
+  </head>
+</head>
+<body>
+  <div class="container">
+    <div class="weather-app">
+      <form class="search-form">
+        <div class="row">
+          <div class="col-6">
+            <input
+              type="search"
+              placeholder="Type a city.."
+              autofocus="on"
+              autocomplete="off"
+              class="form-control shadow-sm"
+            />
+          </div>
+          <div class="col-3">
+            <input
+              type="submit"
+              value="Search"
+              class="form-control btn btn-primary shadow-sm"
+            />
+          </div>
+          <div class="col-3">
+            <input
+              type="submit"
+              value="Current"
+              class="form-control btn btn-primary shadow-sm"
+              id="current-button"
+            />
+          </div>
+        </div>
+      </form>
+      <div class="overview">
+        <h1 id="city"></h1>
+        <ul>
+          <li class="current-date-time" id="current-date-time"></li>
+          <li class="description"></li>
+        </ul>
+        <div class="row">
+          <div class="col-6">
+            <div class="clearfix">
+              <img
+                src="https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png"
+                alt="Cloudy icon"
+                class="weather-icon float-left"
+                id="icon"
+              />
+              <div class="float-left">
+                <p id="temperature" class="temp d-inline-block"></p>
+                <span class="temperature"></span>
+                <span class="units">
+                  <a id="celsius-link" href="#" class="active">°C</a> |
+                  <a id="fahrenheit-link" href="#">°F</a>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <ul>
+              <li id="precipitation"></li>
+              <li id="humidity"></li>
+              <li id="wind"></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="centered">
+    <small>
+        <a
+          href="https://github.com/giumarques/weatherapp"
+          target="_blank"
+          >Open-source code</a
+        >
+        by Giuliana Neri
+      </small>
+    </div>
+  </div>
+  <script src="src/index.js"></script>
+</body>
+</html>
