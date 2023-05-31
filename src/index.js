@@ -16,8 +16,9 @@ function displayTemperature(response) {
   temperatureElement.innerHTML = Math.round(temperature);
 
   let weatherDescriptionElement = document.querySelector(".description");
-  weatherDescriptionElement.textContent =
-    capitalizeFirstLetter(weatherDescription);
+  weatherDescriptionElement.textContent = capitalizeFirstLetter(
+    weatherDescription
+  );
 
   let humidityElement = document.querySelector("#humidity");
   humidityElement.textContent = `Humidity: ${humidity}%`;
@@ -37,9 +38,11 @@ function displayTemperature(response) {
   celsiusTemperature = temperature;
 
   celsiusLink.addEventListener("click", displayCelsiusTemperature);
-  fahrenheitLink.addEventListener("click", displayFahrenheitTemperature);
 
   updateTemperatureUnits();
+
+  let coordinates = response.data.coord;
+  getForecast(coordinates);
 }
 
 function displayFahrenheitTemperature(event) {
@@ -52,7 +55,6 @@ function displayFahrenheitTemperature(event) {
   let fahrenheitLink = document.querySelector("#fahrenheit-link");
 
   celsiusLink.classList.remove("active");
-  fahrenheitLink.classList.add("active");
 }
 
 function displayCelsiusTemperature(event) {
@@ -64,7 +66,6 @@ function displayCelsiusTemperature(event) {
   let fahrenheitLink = document.querySelector("#fahrenheit-link");
 
   celsiusLink.classList.add("active");
-  fahrenheitLink.classList.remove("active");
 }
 
 function updateTemperatureUnits() {
@@ -74,7 +75,6 @@ function updateTemperatureUnits() {
 
   temperatureElement.innerHTML = Math.round(celsiusTemperature);
   celsiusLink.classList.add("active");
-  fahrenheitLink.classList.remove("active");
 }
 
 function searchCity(city) {
@@ -98,8 +98,42 @@ function loadTemperatureFromLocation() {
 loadTemperatureFromLocation();
 
 let form = document.querySelector(".search-form");
-let currentButton = document.querySelector("#current-button");
-let currentDateTimeElement = document.querySelector("#current-date-time");
+let currentButton = document.querySelector("#current-location-button");
+
+let DateTimeElement = document.querySelector("#current-date-time");
+
+function formatDateTime(date) {
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+
+  let currentDay = days[date.getDay()];
+
+  let options = {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: false
+  };
+
+  let formattedTime = date.toLocaleTimeString(undefined, options);
+
+  let formattedDateTime = `${currentDay}, ${formattedTime}`;
+
+  return formattedDateTime;
+}
+
+function updateDateTime() {
+  let currentDate = new Date();
+  DateTimeElement.innerHTML = formatDateTime(currentDate);
+}
+
+setInterval(updateDateTime, 1000);
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
@@ -114,38 +148,54 @@ form.addEventListener("submit", function (event) {
   }
 });
 
-function formatDateTime(date) {
-  let days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  let currentDay = days[date.getDay()];
-
-  let options = {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: false,
-  };
-
-  let formattedTime = date.toLocaleTimeString(undefined, options);
-
-  let formattedDateTime = `${currentDay}, ${formattedTime}`;
-
-  return formattedDateTime;
-}
-
-currentButton.addEventListener("click", loadTemperatureFromLocation);
-
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-let currentTime = new Date();
-let formattedDateTime = formatDateTime(currentTime);
-currentDateTimeElement.textContent = formattedDateTime;
+function formatDay(timestamp) {
+  let date = new Date(timestamp * 1000);
+  let day = date.getDay();
+  let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  return days[day];
+}
+
+function displayForecast(response) {
+  let forecast = response.data.daily;
+
+  let forecastElement = document.querySelector("#forecast");
+
+  let forecastHTML = `<div class="row">`;
+  forecast.forEach(function (forecastDay, index) {
+    if (index < 6) {
+      forecastHTML += `
+      <div class="col-2">
+        <div class="weather-forecast-date">${formatDay(forecastDay.dt)}</div>
+        <img
+          src="http://openweathermap.org/img/wn/${
+            forecastDay.weather[0].icon
+          }@2x.png"
+          alt=""
+          width="42"
+        />
+        <div class="weather-forecast-temperatures">
+          <span class="weather-forecast-temperature-max">${Math.round(
+            forecastDay.temp.max
+          )}°</span>
+          <span class="weather-forecast-temperature-min">${Math.round(
+            forecastDay.temp.min
+          )}°</span>
+        </div>
+      </div>
+    `;
+    }
+  });
+
+  forecastHTML += `</div>`;
+  forecastElement.innerHTML = forecastHTML;
+}
+
+function getForecast(coordinates) {
+  let apiUrl = `https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates.lat}&lon=${coordinates.lon}&exclude=current,minutely,hourly&units=metric&appid=${apiKey}`;
+  axios.get(apiUrl).then(displayForecast);
+}
