@@ -56,7 +56,7 @@
           <div class="col-6">
             <div class="clearfix">
               <img
-                src=""
+                src="#"
                 alt=""
                 class="weather-icon float-left"
                 id="icon"
@@ -65,8 +65,7 @@
                 <p id="temperature" class="temp d-inline-block"></p>
                 <span class="temperature"></span>
                 <span class="units">
-                  <a id="celsius-link" href="#" class="active">°C</a> |
-                  <a id="fahrenheit-link" href="#">°F</a>
+                  <a id="celsius-link" href="#" class="active">°C</a> 
                 </span>
               </div>
             </div>
@@ -79,6 +78,22 @@
             </ul>
           </div>
         </div>
+
+        <div class="weather-forecast" id="forecast">
+            <div class="row">
+              <div class="col-2">
+                <div class="weather-forecast-date">Thu</div>
+                <img
+                  src="http://openweathermap.org/img/wn/50d@2x.png"
+                  alt=""
+                  width="42"
+                />
+                <div class="weather-forecast-temperatures">
+                  <span class="weather-forecast-temperature-max"> 18° </span>
+                  <span class="weather-forecast-temperature-min"> 12° </span>
+                </div>
+              </div>
+            </div>
       </div>
     </div>
     <div class="centered">
