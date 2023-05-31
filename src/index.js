@@ -35,12 +35,7 @@ function displayTemperature(response) {
   let celsiusLink = document.querySelector("#celsius-link");
   let fahrenheitLink = document.querySelector("#fahrenheit-link");
 
-  celsiusTemperature = temperature;
-
-  celsiusLink.addEventListener("click", displayCelsiusTemperature);
-
-  updateTemperatureUnits();
-
+  
   let coordinates = response.data.coord;
   getForecast(coordinates);
 }
@@ -142,6 +137,19 @@ form.addEventListener("submit", function (event) {
 
   if (cityName.length === 0) {
     alert("Please enter a city name.");
+  } else {
+    searchCity(cityName);
+    cityInput.value = "";
+  }
+});
+
+currentButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  let cityInput = document.querySelector(".form-control");
+  let cityName = cityInput.value.trim();
+
+  if (cityName.length === 0) {
+    getCurrentPosition();
   } else {
     searchCity(cityName);
     cityInput.value = "";
